@@ -3,6 +3,7 @@ package com.tyrsa;
 import sun.reflect.generics.tree.Tree;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,10 +18,6 @@ public class MyServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,14 +38,11 @@ public class MyServlet extends HttpServlet {
         }
         else if(selectedFolder != null){
             JSONTree[] items = TreeRoot.openFolder(selectedFolder);
+
             req.setAttribute("message", items); // Make available by ${message} in request scope.
             req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }
     }
 
-    @Override
-    public void init() throws ServletException {
-
-    }
 
 }

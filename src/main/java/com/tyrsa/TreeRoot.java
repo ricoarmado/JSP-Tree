@@ -21,7 +21,7 @@ public class TreeRoot {
 				File f = new File(PATH);
 				if(f.exists()) {
 					Object parsed = parser.parse(new FileReader(PATH));
-					root = JSONTree.parseFromJSON(parsed);
+					root = JSONTree.parseFromJSON(parsed , null);
 				}
 				else {
 				    root = new JSONTree();
@@ -37,6 +37,15 @@ public class TreeRoot {
     }
 
     public static JSONTree[] openFolder(String fileName){
-	    return root.search(fileName);
+        JSONTree[] search = null;
+        if(fileName.equals("...")){
+            search = StackKeeper.instance().pop();
+            if(search == null){
+                search = new JSONTree[]{root};
+            }
+        }else {
+            search = root.search(fileName, root);
+        }
+        return search;
     }
 }
