@@ -35,4 +35,8 @@ public class TreeRoot {
 	public static void addItem(String fileName, boolean isDir){
 
     }
+
+    public static JSONTree[] openFolder(String fileName){
+	    return root.search(fileName);
+    }
 }

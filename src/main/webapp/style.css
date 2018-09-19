@@ -25,3 +25,7 @@
     overflow: hidden;
 }
 
+body{
+    background-image:url('img/desk-equipment.jpg');
+    background-repeat: no-repeat;
+}

@@ -26,15 +26,23 @@ public class MyServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String button = req.getParameter("button");
+        String selectedFolder = req.getParameter("folder_name");
         String namefield;
         String returnMessage = "";
         boolean isDirectory;
-        switch (button){
-            case "add_button":
-                namefield = req.getParameter("name_field");
-                isDirectory = req.getParameter("file_type").equals("directory");
-                TreeRoot.addItem(namefield, isDirectory);
-                break;
+        if(button != null){
+            switch (button){
+                case "add_button":
+                    namefield = req.getParameter("name_field");
+                    isDirectory = req.getParameter("file_type").equals("directory");
+                    TreeRoot.addItem(namefield, isDirectory);
+                    break;
+            }
+        }
+        else if(selectedFolder != null){
+            JSONTree[] items = TreeRoot.openFolder(selectedFolder);
+            req.setAttribute("message", items); // Make available by ${message} in request scope.
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }
     }
 

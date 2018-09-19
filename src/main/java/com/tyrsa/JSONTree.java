@@ -49,6 +49,20 @@ public class JSONTree {
         }
     }
 
+    public JSONTree[] search(String fileName){
+        if(this.name.equals(fileName)){
+            return this.dirs.toArray(new JSONTree[0]);
+        }
+        else{
+            for (JSONTree dir : dirs) {
+                if(dir.isDirectory){
+                    return dir.search(fileName);
+                }
+            }
+        }
+        return null;
+    }
+
     public ArrayList<JSONTree> getDirs() {
         return dirs;
     }
