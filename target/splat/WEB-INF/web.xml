@@ -4,4 +4,12 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+      <servlet-name>MyServlet</servlet-name>
+        <servlet-class>com.tyrsa.MyServlet</servlet-class>
+  </servlet>
+    <servlet-mapping>
+        <servlet-name>MyServlet</servlet-name>
+        <url-pattern>/tree_action</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -1,0 +1,27 @@
+.selected{
+    background-color: #696969;
+}
+.panel-body{
+    display: flex;
+    align-items: center;
+}
+
+.panel-body>img{
+
+    /*display: inline-block;*/
+}
+
+.panel-body>div{
+    flex-grow: 1;
+    /*display: table-cell;*/
+    vertical-align: middle;
+    text-align: left;
+    /*display: inline-block;*/
+    padding-left: 10px;
+}
+.panel{
+    border:0;
+    box-shadow: 0 0 2px rgba(0,0,0,.4);
+    overflow: hidden;
+}
+

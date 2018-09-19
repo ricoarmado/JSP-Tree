@@ -14,7 +14,7 @@ public class TreeRoot {
 	private static JSONTree root;
 	private final static String PATH = "C:\\tree.json";
 	
-	public static JSONTree getRoot() {
+	public static JSONTree[] getRoot() {
 		if(root == null) {
 			JSONParser parser = new JSONParser();
 			try {
@@ -30,6 +30,9 @@ public class TreeRoot {
 				e.printStackTrace();
 			}
 		}
-		return root;
+		return new JSONTree[]{root};
 	}
+	public static void addItem(String fileName, boolean isDir){
+
+    }
 }
