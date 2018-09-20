@@ -1,11 +1,9 @@
 package com.tyrsa;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Stack;
 
-public class StackKeeper {
+class StackKeeper {
     private Stack<JSONTree> stack;
 
     private static StackKeeper keeper;
@@ -14,32 +12,30 @@ public class StackKeeper {
         stack = new Stack<>();
     }
 
-    public static StackKeeper instance() {
+    static StackKeeper instance() {
         if(keeper == null){
             keeper = new StackKeeper();
         }
         return keeper;
     }
 
-    public void push(JSONTree item, JSONTree parent){
-
+    void push(JSONTree item){
         stack.push(item);
     }
 
-    public JSONTree[] pop(){
+    JSONTree[] pop(){
         if(stack.size() == 0){
             return null;
         }
         JSONTree pop = stack.pop();
         JSONTree parent = pop.getParent();
-        if(pop.getName().equals("root")){
-
-        }
         ArrayList<JSONTree> dirs = parent.getDirs();
-        dirs.add(0, new JSONTree("...", true, parent));
+        if(!dirs.get(0).getName().equals("...")){
+            dirs.add(0, new JSONTree("...", true, parent));
+        }
         return dirs.toArray(new JSONTree[]{});
     }
-    public void popNode(){
+    void popNode(){
         stack.pop();
     }
 }

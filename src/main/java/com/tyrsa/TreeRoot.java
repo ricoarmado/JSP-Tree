@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 public class TreeRoot {
 	
 	private static JSONTree root;
+	private static JSONTree current;
 	private final static String PATH = "C:\\tree.json";
 	
 	public static JSONTree[] getRoot() {
@@ -47,5 +48,8 @@ public class TreeRoot {
             search = root.search(fileName, root);
         }
         return search;
+    }
+    public static JSONTree[] getCurrentObject(){
+        return current == null ? new JSONTree[]{root} : new JSONTree[]{current};
     }
 }

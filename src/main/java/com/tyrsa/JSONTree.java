@@ -74,7 +74,7 @@ public class JSONTree {
         else{
             for (JSONTree dir : dirs) {
                 if(dir.isDirectory){
-                    StackKeeper.instance().push(dir, parent);
+                    StackKeeper.instance().push(dir);
                     JSONTree[] search = dir.search(fileName, dir);
                     if(search != null){
                         return search;

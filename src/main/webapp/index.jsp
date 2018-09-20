@@ -26,6 +26,25 @@
         }
     </script>
     <script>
+
+        function add(div) {
+            var img = div.getElementsByTagName("img")
+            if(img[0].id === "folder"){
+                img[0].src = "/img/folder_selected.png"
+            }
+            else {
+                img[0].src = "/img/docs_selected.png"
+            }
+        }
+        function remove(div) {
+            var tmp = div.getElementsByTagName('img')
+            if(tmp[0].id === "folder"){
+                tmp[0].src = "/img/folder.png"
+            }
+            else {
+                tmp[0].src = "/img/docs.png"
+            }
+        }
         var clickHandler = function(e){
             var p = e.target;
             while (p != null && !p.classList.contains("panel-body")){
@@ -33,10 +52,23 @@
             }
             var selected = document.getElementsByClassName("selected");
             for (var i = 0; i < selected.length; i++){
+                remove(selected[i])
                 selected[i].classList.remove("selected");
             }
             p.classList.add("selected");
+            add(p)
+
         };
+        window.addEventListener("keypress", function (e) {
+            var key = e.which || e.keyCode;
+            if (key === 13) { // Нажатие Enter
+                document.getElementsByClassName("selected")[0].dispatchEvent(new MouseEvent('dblclick', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true
+                }));
+            }
+        })
         window.addEventListener("dblclick",function(e){
             e.preventDefault();
             openFolder();
@@ -46,7 +78,7 @@
                 //e.preventDefault();
                 var selected = document.getElementsByClassName("selected");
                 var doc = document.getElementById("file-list");
-                if(selected != null){
+                if(selected != null && selected.length !== 0 ){
                     var array = doc.getElementsByClassName("panel");
                     var i;
                     var found = false;
@@ -58,18 +90,29 @@
                         }
                     }
                     if(found){
-                        console.log(i)
                         if(e.code === "ArrowDown" && i != (array.length - 1)){
                             var elem = array[i].getElementsByClassName("selected");
+                            remove(elem[0])
                             elem[0].classList.remove("selected")
-                            array[i+1].getElementsByClassName("panel-body")[0].classList.add("selected")
+                            var div = array[i+1].getElementsByClassName("panel-body")[0]
+                            add(div)
+                            div.classList.add("selected")
                         }
                         else if(e.code === "ArrowUp" && i != 0){
                             var elem = array[i].getElementsByClassName("selected");
+                            remove(elem[0])
                             elem[0].classList.remove("selected")
-                            array[i-1].getElementsByClassName("panel-body")[0].classList.add("selected")
+                            var div = array[i-1].getElementsByClassName("panel-body")[0]
+                            add(div)
+                            div.classList.add("selected")
                         }
                     }
+                }
+                else {
+                    console.log("here")
+                    var div = document.getElementsByClassName("panel-body")[0]
+                    add(div)
+                    div.classList.add("selected")
                 }
             }
         })
@@ -91,11 +134,13 @@
                 panelBody.onclick = clickHandler;
 
                 var img = document.createElement("img");
-                if(dir === true){
+                if(dir === "true"){
                     img.setAttribute("src","/img/folder.png");
+                    img.id = 'folder'
                 }
                 else{
                     img.setAttribute("src","/img/docs.png");
+                    img.id = 'file'
                 }
                 panelBody.appendChild(img);
                 panelBody.appendChild(p);
@@ -103,16 +148,11 @@
                 list.appendChild(panelDiv);
             }
         </script>
-        <%
-            JSONTree[] node = TreeRoot.getRoot();
-            for(JSONTree obj : node) {
-                String name = obj.getName();
-                boolean isDir = obj.isDirectory();
-                %><script>printTree("<%=name%>", "<%=isDir%>")</script><%
-            }
-        %>
     <%
         JSONTree[] tree = (JSONTree[]) request.getAttribute("message");
+        if(tree == null){
+            tree = TreeRoot.getRoot();
+        }
         if(tree != null && tree.length != 0){
             %><script>
                 var list = document.getElementById("file-list");
