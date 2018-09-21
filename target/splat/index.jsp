@@ -119,7 +119,18 @@
     </script>
 
     <br/>
+    <form id="button_form" action="/tree_action" method="post">
     <div class="file-list" id="file-list"></div>
+    <br><br><br><br><br>
+
+        Имя для добавления/редактирования<br>
+        <input type="text" name="name_field"><br>
+        <input type="radio" name="file_type" value="directory" checked>Каталог<br>
+        <input type="radio" name="file_type" value="file">Файл<br>
+        <button type="submit" name="button" value="add_button">Добавить элемент</button>
+        <button type="submit" name="button" value="edit_button">Изменить элемент</button>
+        <button type="submit" name="button" value="remove_buton">Удалить элемент</button>
+    </form>
         <script>
             var list = document.getElementById("file-list");
             list.innerHTML = ""
@@ -167,7 +178,11 @@
     %>
 
 
-
+    <script type="text/javascript">
+       if("<%=request.getAttribute("getAlert")%>" !== "null"){
+          alert("<%=request.getAttribute("getAlert")%>");
+       }
+    </script>
 
 
     <form id="folder_form" action="/tree_action" method="post">
@@ -175,15 +190,6 @@
     </form>
 
 
-    <br><br><br><br><br>
-    <form id="button_form" action="/tree_action" method="post">
-        Имя для добавления/редактирования<br>
-        <input type="text" name="name_field"><br>
-        <input type="radio" name="file_type" value="directory">Каталог<br>
-        <input type="radio" name="file_type" value="file">Файл<br>
-        <button type="submit" name="button" value="add_button">Добавить элемент</button>
-        <button type="submit" name="button" value="edit_button">Изменить элемент</button>
-        <button type="submit" name="button" value="remove_buton">Удалить элемент</button>
-    </form>
+
 </body>
 </html>

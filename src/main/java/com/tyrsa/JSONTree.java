@@ -2,9 +2,12 @@ package com.tyrsa;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class JSONTree {
 
@@ -35,11 +38,13 @@ public class JSONTree {
             array.add(tmp.toString());
         }
         obj.put("files", array);
-        return obj.toJSONString();
+        return obj.toString();
     }
-    public static JSONTree parseFromJSON(Object json, JSONTree parent){
+    public static JSONTree parseFromJSON(Object json, JSONTree parent) throws ParseException {
         JSONTree result = new JSONTree();
-        JSONObject tmp = (JSONObject) json;
+        String valueOf = String.valueOf(json);
+        Object parse = new JSONParser().parse(valueOf);
+        JSONObject tmp = (JSONObject) parse;
         result.name = (String) tmp.get("name");
         result.isDirectory = (boolean) tmp.get("directory");
         result.dirs = parseFromJSONArray(tmp.get("files"), result);
@@ -49,7 +54,7 @@ public class JSONTree {
         }
         return result;
     }
-    public static ArrayList<JSONTree> parseFromJSONArray(Object json, JSONTree parent){
+    public static ArrayList<JSONTree> parseFromJSONArray(Object json, JSONTree parent) throws ParseException {
         if(json != null){
             ArrayList<JSONTree> result = new ArrayList<>();
             JSONArray array = (JSONArray) json;
@@ -88,6 +93,10 @@ public class JSONTree {
         return null;
     }
 
+    public void addChild(JSONTree item){
+        dirs.add(item);
+    }
+
     public ArrayList<JSONTree> getDirs() {
         return dirs;
     }
@@ -106,5 +115,12 @@ public class JSONTree {
 
     public void setParent(JSONTree parent) {
         this.parent = parent;
+    }
+
+    public void save() throws FileNotFoundException {
+        String s = toString();
+        PrintWriter writer = new PrintWriter("C:\\tree.json");
+        writer.write(s);
+        writer.close();
     }
 }

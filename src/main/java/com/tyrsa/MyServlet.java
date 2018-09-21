@@ -1,14 +1,10 @@
 package com.tyrsa;
 
-import sun.reflect.generics.tree.Tree;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 public class MyServlet extends HttpServlet {
@@ -32,9 +28,16 @@ public class MyServlet extends HttpServlet {
                 case "add_button":
                     namefield = req.getParameter("name_field");
                     isDirectory = req.getParameter("file_type").equals("directory");
-                    TreeRoot.addItem(namefield, isDirectory);
+                    if(namefield != ""){
+                        TreeRoot.addItem(namefield, isDirectory);
+                    }
+                    else{
+                        req.setAttribute("getAlert", "Не выбрано имя для файла");
+                        req.getRequestDispatcher("/index.jsp").forward(req, resp);
+                    }
                     break;
             }
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }
         else if(selectedFolder != null){
             JSONTree[] items = TreeRoot.openFolder(selectedFolder);

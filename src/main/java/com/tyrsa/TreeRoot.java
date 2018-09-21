@@ -1,6 +1,7 @@
 package com.tyrsa;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -12,7 +13,7 @@ import org.json.simple.parser.ParseException;
 public class TreeRoot {
 	
 	private static JSONTree root;
-	private static JSONTree current;
+	private static JSONTree[] current;
 	private final static String PATH = "C:\\tree.json";
 	
 	public static JSONTree[] getRoot() {
@@ -30,26 +31,34 @@ public class TreeRoot {
 			} catch (IOException | ParseException e) {
 				e.printStackTrace();
 			}
+			current = new JSONTree[]{root};
 		}
 		return new JSONTree[]{root};
 	}
-	public static void addItem(String fileName, boolean isDir){
-
+	public static void addItem(String fileName, boolean isDir) throws FileNotFoundException {
+        JSONTree parent;
+        if(!current[0].equals(root)){
+            parent = current[0].getParent();
+        }else {
+            parent = root;
+        }
+        JSONTree tmp = new JSONTree(fileName, isDir, parent);
+        parent.addChild(tmp);
+        root.save();
     }
 
     public static JSONTree[] openFolder(String fileName){
-        JSONTree[] search = null;
         if(fileName.equals("...")){
-            search = StackKeeper.instance().pop();
-            if(search == null){
-                search = new JSONTree[]{root};
+            current = StackKeeper.instance().pop();
+            if(current == null){
+                current = new JSONTree[]{root};
             }
         }else {
-            search = root.search(fileName, root);
+            current = root.search(fileName, root);
         }
-        return search;
+        return current;
     }
     public static JSONTree[] getCurrentObject(){
-        return current == null ? new JSONTree[]{root} : new JSONTree[]{current};
+        return current == null ? new JSONTree[]{root} : current;
     }
 }
