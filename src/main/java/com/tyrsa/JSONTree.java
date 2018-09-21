@@ -72,8 +72,8 @@ public class JSONTree {
     public JSONTree[] search(String fileName, JSONTree parent){
         if(this.name.equals(fileName)){
             ArrayList<JSONTree> tmp = new ArrayList<>(dirs);
-            if(!tmp.get(0).getName().equals("..."))
-            tmp.add(0,new JSONTree("...", true,parent));
+            if(tmp.size() > 0 && !tmp.get(0).getName().equals("...") || tmp.size() == 0)
+                tmp.add(0,new JSONTree("...", true,parent));
             return tmp.toArray(new JSONTree[0]);
         }
         else{
@@ -122,5 +122,17 @@ public class JSONTree {
         PrintWriter writer = new PrintWriter("C:\\tree.json");
         writer.write(s);
         writer.close();
+    }
+
+    public void delete(String deleteFile) {
+        for (JSONTree dir : dirs) {
+            if(dir.getName().equals(deleteFile)){
+                dirs.remove(dir);
+                break;
+            }
+            if(dir.isDirectory()){
+                dir.delete(deleteFile);
+            }
+        }
     }
 }

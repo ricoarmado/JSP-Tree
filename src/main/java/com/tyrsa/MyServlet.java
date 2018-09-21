@@ -20,6 +20,8 @@ public class MyServlet extends HttpServlet {
 
         String button = req.getParameter("button");
         String selectedFolder = req.getParameter("folder_name");
+        String deleteFile = req.getParameter("del_name");
+        String addName = req.getParameter("add_name");
         String namefield;
         String returnMessage = "";
         boolean isDirectory;
@@ -37,15 +39,18 @@ public class MyServlet extends HttpServlet {
                     }
                     break;
             }
-            req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }
         else if(selectedFolder != null){
             JSONTree[] items = TreeRoot.openFolder(selectedFolder);
-
             req.setAttribute("message", items); // Make available by ${message} in request scope.
-            req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }
+        else if(deleteFile != null){
+            if(deleteFile != "root"){
+                JSONTree tree = TreeRoot.getRoot()[0];
+                tree.delete(deleteFile);
+                tree.save();
+            }
+        }
+        req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
-
-
 }

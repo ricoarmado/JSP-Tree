@@ -61,7 +61,7 @@
         };
         window.addEventListener("keypress", function (e) {
             var key = e.which || e.keyCode;
-            if (key === 13) { // Нажатие Enter
+            if (key === 13) { 
                 document.getElementsByClassName("selected")[0].dispatchEvent(new MouseEvent('dblclick', {
                     'view': window,
                     'bubbles': true,
@@ -122,16 +122,29 @@
     <form id="button_form" action="/tree_action" method="post">
     <div class="file-list" id="file-list"></div>
     <br><br><br><br><br>
-
         Имя для добавления/редактирования<br>
         <input type="text" name="name_field"><br>
         <input type="radio" name="file_type" value="directory" checked>Каталог<br>
         <input type="radio" name="file_type" value="file">Файл<br>
-        <button type="submit" name="button" value="add_button">Добавить элемент</button>
-        <button type="submit" name="button" value="edit_button">Изменить элемент</button>
-        <button type="submit" name="button" value="remove_buton">Удалить элемент</button>
+        <button type="submit" id="add_elem" name="button" value="add_button">Добавить элемент</button>
     </form>
+    <button type="submit" id="edit_elem" name="button" value="edit_button">Изменить элемент</button>
+    <button type="submit" id="del_elem" name="button" value="remove_buton">Удалить элемент</button>
         <script>
+            document.getElementById('del_elem').onclick = function () {
+                var selected = document.getElementsByClassName("selected");
+                var text = null
+                if(selected.length != 0){
+                    text = selected[0].getElementsByTagName("div")[0].innerText;
+                    var form = document.getElementById("del_form");
+                    document.getElementById('del_name').value = text;
+                    form.submit();
+                }
+                else{
+                    alert("Вы не выбрали файл");
+                }
+            }
+
             var list = document.getElementById("file-list");
             list.innerHTML = ""
             function printTree(text, dir) {
@@ -187,6 +200,12 @@
 
     <form id="folder_form" action="/tree_action" method="post">
         <input type="hidden" id="folder_name" name="folder_name"/>
+    </form>
+    <form id="del_form" action="/tree_action" method="post">
+        <input type="hidden" id="del_name" name="del_name"/>
+    </form>
+    <form id="add_form" action="/tree_action" method="post">
+        <input type="hidden" id="add_name" name="add_name"/>
     </form>
 
 
