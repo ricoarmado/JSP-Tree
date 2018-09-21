@@ -135,4 +135,16 @@ public class JSONTree {
             }
         }
     }
+
+    public void setDirectory(boolean directory) {
+        isDirectory = directory;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void removeDirs() {
+        dirs = new ArrayList<>();
+    }
 }

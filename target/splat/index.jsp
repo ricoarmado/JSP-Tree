@@ -24,9 +24,6 @@
                 alert("Вы не выбрали папку");
             }
         }
-    </script>
-    <script>
-
         function add(div) {
             var img = div.getElementsByTagName("img")
             if(img[0].id === "folder"){
@@ -61,7 +58,7 @@
         };
         window.addEventListener("keypress", function (e) {
             var key = e.which || e.keyCode;
-            if (key === 13) { 
+            if (key === 13) {
                 document.getElementsByClassName("selected")[0].dispatchEvent(new MouseEvent('dblclick', {
                     'view': window,
                     'bubbles': true,
@@ -123,8 +120,8 @@
     <div class="file-list" id="file-list"></div>
     <br><br><br><br><br>
         Имя для добавления/редактирования<br>
-        <input type="text" name="name_field"><br>
-        <input type="radio" name="file_type" value="directory" checked>Каталог<br>
+        <input id="name_field" type="text" name="name_field"><br>
+        <input id="dir_radio" type="radio" name="file_type" value="directory" checked>Каталог<br>
         <input type="radio" name="file_type" value="file">Файл<br>
         <button type="submit" id="add_elem" name="button" value="add_button">Добавить элемент</button>
     </form>
@@ -144,7 +141,23 @@
                     alert("Вы не выбрали файл");
                 }
             }
-
+            document.getElementById('edit_elem').onclick = function () {
+                var selected = document.getElementsByClassName("selected");
+                var text = null
+                if(selected.length != 0){
+                    text = selected[0].getElementsByTagName("div")[0].innerText;
+                    var form = document.getElementById("edit_form");
+                    var checked = document.getElementById("dir_radio").checked
+                    var newname = document.getElementById("name_field").value
+                    document.getElementById('edit_name').value = text;
+                    document.getElementById('new_name').value = newname;
+                    document.getElementById('dir').value = checked;
+                    form.submit();
+                }
+                else{
+                    alert("Вы не выбрали файл");
+                }
+            }
             var list = document.getElementById("file-list");
             list.innerHTML = ""
             function printTree(text, dir) {
@@ -204,8 +217,10 @@
     <form id="del_form" action="/tree_action" method="post">
         <input type="hidden" id="del_name" name="del_name"/>
     </form>
-    <form id="add_form" action="/tree_action" method="post">
-        <input type="hidden" id="add_name" name="add_name"/>
+    <form id="edit_form" action="/tree_action" method="post">
+        <input type="hidden" id="edit_name" name="edit_name"/>
+        <input type="hidden" id="new_name" name="new_name" />
+        <input type="hidden" id="dir" name="dir" />
     </form>
 
 

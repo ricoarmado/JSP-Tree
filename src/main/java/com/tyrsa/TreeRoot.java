@@ -61,4 +61,18 @@ public class TreeRoot {
     public static JSONTree[] getCurrentObject(){
         return current == null ? new JSONTree[]{root} : current;
     }
+
+    public static void edit(String editName, String newName, boolean isDirectory) throws FileNotFoundException {
+        for (JSONTree tree : current) {
+            if(tree.getName().equals(editName)){
+                if(!isDirectory && tree.getDirs().size() != 0){
+                    tree.removeDirs();
+                }
+                tree.setDirectory(isDirectory);
+                tree.setName(newName);
+                break;
+            }
+        }
+        root.save();
+    }
 }
