@@ -7,7 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="style.css">
+
 </head>
 <body>
     <script>
@@ -65,11 +67,14 @@
                     'cancelable': true
                 }));
             }
-        })
+        });
         window.addEventListener("dblclick",function(e){
             e.preventDefault();
-            openFolder();
-        })
+            var selected = document.getElementsByClassName("selected");
+            var img = selected[0].getElementsByTagName('img');
+            img[0].src = "/img/loader.gif";
+            setTimeout(openFolder, 2000);
+        });
         window.addEventListener("keydown",function(e){
             if(e.code === "ArrowDown" || e.code === "ArrowUp"){
                 //e.preventDefault();
@@ -81,7 +86,7 @@
                     var found = false;
                     for(i = 0; i < array.length; i++){
                         var elem = array[i].getElementsByClassName("selected");
-                        if(elem.length != 0){
+                        if(elem.length !== 0){
                             found = true;
                             break;
                         }
@@ -125,6 +130,7 @@
         <input type="radio" name="file_type" value="file">Файл<br>
         <button type="submit" id="add_elem" name="button" value="add_button">Добавить элемент</button>
     </form>
+    <div class="loader"></div>
     <button type="submit" id="edit_elem" name="button" value="edit_button">Изменить элемент</button>
     <button type="submit" id="del_elem" name="button" value="remove_buton">Удалить элемент</button>
     <button type="submit" id="select_elem" name="button" value="select_button">Вырезать элемент</button>
