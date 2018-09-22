@@ -15,6 +15,8 @@ public class TreeRoot {
 	private static JSONTree root;
 	private static JSONTree[] current;
 	private final static String PATH = "C:\\tree.json";
+	private static String cutElem;
+	private static JSONTree cuttedNode;
 	
 	public static JSONTree[] getRoot() {
 		if(root == null) {
@@ -74,5 +76,31 @@ public class TreeRoot {
             }
         }
         root.save();
+    }
+
+    public static void setCutElem(String cutElem) {
+        for (JSONTree tree : current) {
+            if(tree.getName().equals(cutElem)){
+                cuttedNode = tree;
+                break;
+            }
+        }
+    }
+
+    public static boolean pasteElem() throws FileNotFoundException {
+        if(cuttedNode == null){
+            return false;
+        }
+        JSONTree newParent = current[0].getParent();
+        JSONTree oldParent = cuttedNode.getParent();
+        if(cuttedNode.equals(newParent)){ // Запрет копирования папки в себя
+            return false;
+        }
+        oldParent.delete(cuttedNode.getName());
+        newParent.addChild(cuttedNode);
+        cuttedNode.setParent(newParent);
+        cuttedNode = null;
+        root.save();
+        return true;
     }
 }

@@ -22,24 +22,35 @@ public class MyServlet extends HttpServlet {
         String selectedFolder = req.getParameter("folder_name");
         String deleteFile = req.getParameter("del_name");
         String editName = req.getParameter("edit_name");
+        String selectedName = req.getParameter("selected_name");
+        String pasteName = req.getParameter("paste_name");
         String namefield;
         String returnMessage = "";
         boolean isDirectory;
         if(button == "add_button"){
             namefield = req.getParameter("name_field");
-            isDirectory = req.getParameter("file_type").equals("directory");
-            if(namefield != ""){
-                TreeRoot.addItem(namefield, isDirectory);
+            if(!namefield.equals("root")) {
+                isDirectory = req.getParameter("file_type").equals("directory");
+                if (namefield != "") {
+                    TreeRoot.addItem(namefield, isDirectory);
+                } else {
+                    req.setAttribute("getAlert", "Не выбрано имя для файла");
+                    req.getRequestDispatcher("/index.jsp").forward(req, resp);
+                }
             }
-            else{
-                req.setAttribute("getAlert", "Не выбрано имя для файла");
-                req.getRequestDispatcher("/index.jsp").forward(req, resp);
+            else {
+                req.setAttribute("getAlert", "Имя Root зарезервировано");
             }
         }
         else if(editName != null){
             namefield = req.getParameter("new_name");
-            isDirectory = req.getParameter("dir").equals("true");
-            TreeRoot.edit(editName, namefield, isDirectory);
+            if(!namefield.equals("root")) {
+                isDirectory = req.getParameter("dir").equals("true");
+                TreeRoot.edit(editName, namefield, isDirectory);
+            }
+            else {
+                req.setAttribute("getAlert", "Имя Root зарезервировано");
+            }
         }
         else if(selectedFolder != null){
             JSONTree[] items = TreeRoot.openFolder(selectedFolder);
@@ -50,6 +61,24 @@ public class MyServlet extends HttpServlet {
                 JSONTree tree = TreeRoot.getRoot()[0];
                 tree.delete(deleteFile);
                 tree.save();
+            }
+            else {
+                req.setAttribute("getAlert", "Запрещено удалять папку Root");
+            }
+        }
+        else if(selectedName != null){
+            if(!selectedName.equals("root")) {
+                TreeRoot.setCutElem(selectedName);
+                req.setAttribute("getAlert", "Теперь перейдите в папку и нажмите `Вставить`");
+            }
+            else {
+                req.setAttribute("getAlert", "Запрещено вырезать Root");
+            }
+        }
+        else if(pasteName != null){
+            boolean result = TreeRoot.pasteElem();
+            if(!result){
+                req.setAttribute("getAlert", "Файл не был вставлен. Возможно, вы не выбрали файл");
             }
         }
         req.getRequestDispatcher("/index.jsp").forward(req, resp);

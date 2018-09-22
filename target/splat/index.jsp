@@ -127,11 +127,13 @@
     </form>
     <button type="submit" id="edit_elem" name="button" value="edit_button">Изменить элемент</button>
     <button type="submit" id="del_elem" name="button" value="remove_buton">Удалить элемент</button>
+    <button type="submit" id="select_elem" name="button" value="select_button">Вырезать элемент</button>
+    <button type="submit" id="paste_elem" name="button" value="paste_button">Вставить элемент</button>
         <script>
             document.getElementById('del_elem').onclick = function () {
                 var selected = document.getElementsByClassName("selected");
                 var text = null
-                if(selected.length != 0){
+                if(selected.length !== 0){
                     text = selected[0].getElementsByTagName("div")[0].innerText;
                     var form = document.getElementById("del_form");
                     document.getElementById('del_name').value = text;
@@ -140,7 +142,7 @@
                 else{
                     alert("Вы не выбрали файл");
                 }
-            }
+            };
             document.getElementById('edit_elem').onclick = function () {
                 var selected = document.getElementsByClassName("selected");
                 var text = null
@@ -158,6 +160,21 @@
                     alert("Вы не выбрали файл");
                 }
             }
+            document.getElementById('select_elem').onclick = function () {
+                var selected = document.getElementsByClassName("selected");
+                if(selected.length !== 0){
+                    var form = document.getElementById("select_form");
+                    var text = selected[0].getElementsByTagName("div")[0].innerText;
+                    document.getElementById("selected_name").value = text;
+                    form.submit();
+                }
+            };
+            document.getElementById('paste_elem').onclick = function () {
+                var form = document.getElementById("paste_form");
+                document.getElementById("paste_name").value = "paste";
+                form.submit();
+            };
+
             var list = document.getElementById("file-list");
             list.innerHTML = ""
             function printTree(text, dir) {
@@ -221,6 +238,12 @@
         <input type="hidden" id="edit_name" name="edit_name"/>
         <input type="hidden" id="new_name" name="new_name" />
         <input type="hidden" id="dir" name="dir" />
+    </form>
+    <form id="select_form" action="/tree_action" method="post">
+        <input type="hidden" id="selected_name" name="selected_name"/>
+    </form>
+    <form id="paste_form" action="/tree_action" method="post">
+        <input type="hidden" id="paste_name" name="paste_name"/>
     </form>
 
 
