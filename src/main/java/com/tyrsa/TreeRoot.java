@@ -14,9 +14,8 @@ public class TreeRoot {
 	
 	private static JSONTree root;
 	private static JSONTree[] current;
-	private final static String PATH = "C:\\tree.json";
-	private static String cutElem;
-	private static JSONTree cuttedNode;
+	private final static String PATH = System.getProperty("user.home") + "/tree.json";
+    private static JSONTree cuttedNode;
 	
 	public static JSONTree[] getRoot() {
 		if(root == null) {
@@ -29,6 +28,7 @@ public class TreeRoot {
 				}
 				else {
 				    root = new JSONTree();
+				    root.save();
                 }
 			} catch (IOException | ParseException e) {
 				e.printStackTrace();

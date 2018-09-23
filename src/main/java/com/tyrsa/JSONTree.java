@@ -15,10 +15,13 @@ public class JSONTree {
     private boolean isDirectory;
     private ArrayList<JSONTree> dirs;
     private JSONTree parent;
+    private final static String PATH = System.getProperty("user.home") + "/tree.json";
 
 
     public JSONTree() {
-
+        this.dirs = new ArrayList<>();
+        this.name = "root";
+        this.isDirectory = true;
     }
 
     public JSONTree(String name, boolean isDirectory, JSONTree parent) {
@@ -119,7 +122,7 @@ public class JSONTree {
 
     public void save() throws FileNotFoundException {
         String s = toString();
-        PrintWriter writer = new PrintWriter("C:\\tree.json");
+        PrintWriter writer = new PrintWriter(PATH);
         writer.write(s);
         writer.close();
     }

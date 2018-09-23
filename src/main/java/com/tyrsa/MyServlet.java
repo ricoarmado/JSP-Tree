@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 
 public class MyServlet extends HttpServlet {
@@ -25,13 +26,12 @@ public class MyServlet extends HttpServlet {
         String selectedName = req.getParameter("selected_name");
         String pasteName = req.getParameter("paste_name");
         String namefield;
-        String returnMessage = "";
         boolean isDirectory;
-        if(button == "add_button"){
+        if(Objects.equals(button, "add_button")){
             namefield = req.getParameter("name_field");
             if(!namefield.equals("root")) {
                 isDirectory = req.getParameter("file_type").equals("directory");
-                if (namefield != "") {
+                if (!Objects.equals(namefield, "")) {
                     TreeRoot.addItem(namefield, isDirectory);
                 } else {
                     req.setAttribute("getAlert", "Не выбрано имя для файла");
@@ -54,10 +54,10 @@ public class MyServlet extends HttpServlet {
         }
         else if(selectedFolder != null){
             JSONTree[] items = TreeRoot.openFolder(selectedFolder);
-            req.setAttribute("message", items); // Make available by ${message} in request scope.
+            req.setAttribute("message", items);
         }
         else if(deleteFile != null){
-            if(deleteFile != "root"){
+            if(!Objects.equals(deleteFile, "root")){
                 JSONTree tree = TreeRoot.getRoot()[0];
                 tree.delete(deleteFile);
                 tree.save();
@@ -79,6 +79,9 @@ public class MyServlet extends HttpServlet {
             boolean result = TreeRoot.pasteElem();
             if(!result){
                 req.setAttribute("getAlert", "Файл не был вставлен. Возможно, вы не выбрали файл");
+            }
+            else {
+                req.setAttribute("getAlert", "Вставлено");
             }
         }
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
